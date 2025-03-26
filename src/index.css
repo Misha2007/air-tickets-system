@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  width: 100%;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -28,6 +32,16 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0.2) 20%,
+    rgba(102, 102, 102, 0.2) 40%,
+    rgba(102, 102, 102, 0.2) 50%,
+    rgba(102, 102, 102, 0.2) 60%,
+    rgba(0, 0, 0, 0.2) 80%
+  );
+
+  overflow: hidden;
 }
 
 h1 {

@@ -1,0 +1,106 @@
+.main-container {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  animation: zoomInContainer 6s ease forwards;
+  animation-delay: 1.3s;
+}
+
+.illuminator-container {
+  border-right: 5px solid transparent;
+  border-image-source: linear-gradient(#e5e5e5 0%, #ffffff 45%, #cccccc 100%);
+  border-image-slice: 1;
+  box-sizing: border-box;
+  z-index: 0;
+}
+
+.main-container div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illuminator {
+  position: relative;
+  width: 390px;
+  height: 510px;
+  background-image: radial-gradient(
+    ellipse at center,
+    #f0f0f0 10%,
+    #d9d9d9 60%,
+    #737373 75%,
+    #333333 100%
+  );
+  border-radius: 50%;
+  z-index: -2;
+}
+
+.illuminator::before {
+  position: absolute;
+  content: "";
+  width: 260px;
+  height: 390px;
+  background-color: #c9c9c9;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.25);
+}
+
+.illuminator .img {
+  height: 300px;
+  width: 185px;
+  background-image: url("https://media.fab.com/image_previews/gallery_images/eea45fad-f6b8-4257-b75f-4d629cae1a7a/9a313fdf-ce18-4051-b4c3-4c247dbc488a.jpg");
+  background-size: 100% 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  padding: 20px;
+  border: #000000 1px solid;
+  z-index: 2;
+}
+
+.main-picture .img {
+  animation: zoomOutImage 6s ease forwards;
+  animation-delay: 1.3s;
+}
+
+.illuminator .div {
+  position: absolute;
+  top: 10%;
+  width: 190px;
+  height: 130px;
+  background-image: linear-gradient(#adadad 46%, #474747 100%);
+  border-radius: 40% 40% 60% 60%;
+  z-index: 3;
+}
+
+.illuminator .div::after {
+  content: "";
+  position: absolute;
+  top: 70%;
+  left: 30%;
+  background-color: #d9d9d9;
+  width: 80px;
+  height: 15px;
+  border-radius: 40%;
+  z-index: 4;
+}
+
+@keyframes zoomInContainer {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(5);
+  }
+}
+
+@keyframes zoomOutImage {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
