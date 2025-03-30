@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap");
+
+#main-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#main-page .form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://static.vecteezy.com/system/resources/thumbnails/038/363/072/small_2x/ai-generated-side-view-of-commercial-airplane-isolated-on-transparent-background-passenger-plane-generative-ai-png.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 70vw;
+  height: 70vh;
+}
+
+#main-page .form-container form::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  height: 30vh;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: -1;
+}
+
+#main-page .form-container form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10%;
+  background: rgba(129, 129, 129, 0.68);
+  z-index: 1;
+  color: #fff;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+label,
+input {
+  color: #fff;
+  font-size: 20px;
+}
+
+input::placeholder {
+  color: #fff;
+  /* font-size: 20px; */
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  background: transparent;
+  border: none;
+  border-bottom: #fff 2px solid;
+}
+
+input:focus {
+  outline: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+input[type="number"] {
+  appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fa-search {
+  font-size: 42px;
+  color: #bbbbbb;
+  cursor: pointer;
+}
+
+.main-flight-search {
+  padding-bottom: 10px;
+}
+
+#no-found {
+  color: #ff3021;
+  text-align: center;
+}

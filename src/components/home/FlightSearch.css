@@ -1,0 +1,69 @@
+.main-flight-search .flight {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10%;
+  background: rgba(129, 129, 129, 0.68);
+  z-index: 1;
+  color: #fff;
+  border-radius: 20px;
+  padding: 0px;
+}
+
+.main-flight-search .flight::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  height: 350px;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: -1;
+}
+
+.fa-plane {
+  display: inline-block;
+  vertical-align: middle; /* Ensures it aligns correctly with text */
+  font-size: 60px; /* Adjust the font size as needed */
+  line-height: 1;
+  color: #97acb7;
+}
+
+.arrow {
+  font-size: 200px;
+  line-height: 50%;
+}
+
+h1 {
+  line-height: 10%;
+}
+
+p {
+  font-size: 36px;
+  line-height: 60%;
+}
+
+small {
+  line-height: 10%;
+  font-size: 24px;
+}
+
+button {
+  background-color: #e36858;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  font-size: 36px;
+  font-family: "Josefin Slab";
+}
+
+.last-item {
+  padding-right: 50px;
+  border-right: #ffffff 2px solid;
+}
+
+.bold {
+  font-weight: bold;
+}
