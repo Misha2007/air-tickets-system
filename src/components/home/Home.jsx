@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Home.css";
 import FlightSearch from "./FlightSearch";
+import Flight from "./Flight";
 
 const Home = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const Home = () => {
   const [flights, setFlights] = useState([]);
 
   const [formIsFilled, setFormIsFilled] = useState(false);
+
+  const [openFlight, setOpenFlight] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -79,67 +82,81 @@ const Home = () => {
     setFlights(filteredFlights);
   };
 
+  const openFlightHandler = () => {
+    setOpenFlight(!openFlight);
+  };
+
   return (
     <div id="page">
-      <div id="main-page">
-        <div className="form-container">
-          <form onSubmit={searchFlights}>
-            <div className="form-group">
-              <label htmlFor="arrival">Arrival:</label>
-              <input
-                id="arrival"
-                type="text"
-                placeholder="Tallinn"
-                value={formData.arrival}
-                onChange={handleChange}
-              />
+      {openFlight ? (
+        <Flight></Flight>
+      ) : (
+        <div>
+          <div id="main-page">
+            <div className="form-container">
+              <form onSubmit={searchFlights}>
+                <div className="form-group">
+                  <label htmlFor="arrival">Arrival:</label>
+                  <input
+                    id="arrival"
+                    type="text"
+                    placeholder="Tallinn"
+                    value={formData.arrival}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="destination">Destination:</label>
+                  <input
+                    id="destination"
+                    type="text"
+                    placeholder="Paris"
+                    value={formData.destination}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="date">Date:</label>
+                  <input
+                    id="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="persons">Persons:</label>
+                  <input
+                    id="persons"
+                    type="number"
+                    min="1"
+                    value={formData.persons}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <i className="fa fa-search" onClick={searchFlights}></i>
+              </form>
             </div>
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="destination">Destination:</label>
-              <input
-                id="destination"
-                type="text"
-                placeholder="Paris"
-                value={formData.destination}
-                onChange={handleChange}
-              />
+          {formIsFilled && (
+            <div className="main-flight-search">
+              {flights.length > 0 ? (
+                flights.map((flight, index) => (
+                  <FlightSearch
+                    key={index}
+                    flight={flight}
+                    openFlightHandler={openFlightHandler}
+                  />
+                ))
+              ) : (
+                <p id="no-found">No flights found.</p>
+              )}
             </div>
-
-            <div className="form-group">
-              <label htmlFor="date">Date:</label>
-              <input
-                id="date"
-                type="date"
-                value={formData.date}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="persons">Persons:</label>
-              <input
-                id="persons"
-                type="number"
-                min="1"
-                value={formData.persons}
-                onChange={handleChange}
-              />
-            </div>
-
-            <i className="fa fa-search" onClick={searchFlights}></i>
-          </form>
-        </div>
-      </div>
-
-      {formIsFilled && (
-        <div className="main-flight-search">
-          {flights.length > 0 ? (
-            flights.map((flight, index) => (
-              <FlightSearch key={index} flight={flight} />
-            ))
-          ) : (
-            <p id="no-found">No flights found.</p>
           )}
         </div>
       )}

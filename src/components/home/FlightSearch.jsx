@@ -1,6 +1,7 @@
 import "./FlightSearch.css";
+import Flight from "./Flight";
 
-const FlightSearch = ({ flight }) => {
+const FlightSearch = (props) => {
   const formatDateTime = (date) => {
     return new Intl.DateTimeFormat("en-GB", {
       year: "numeric",
@@ -23,28 +24,33 @@ const FlightSearch = ({ flight }) => {
     <div className="flight">
       <div className="form-group">
         <p>From:</p>
-        <h1>{flight.from.code}</h1>
-        <p className="bold">{flight.from.city}</p>
-        <small>{formatDateTime(flight.from.dateTime)}</small>
+        <h1>{props.flight.from.code}</h1>
+        <p className="bold">{props.flight.from.city}</p>
+        <small>{formatDateTime(props.flight.from.dateTime)}</small>
       </div>
       <div className="form-group">
-        <small>{flight.flightNumber}</small>
+        <small>{props.flight.flightNumber}</small>
         <i className="fa fa-plane"></i>
         <span className="arrow">&#x2192;</span>
         <small>
-          {calculateDuration(flight.from.dateTime, flight.to.dateTime)}
+          {calculateDuration(
+            props.flight.from.dateTime,
+            props.flight.to.dateTime
+          )}
         </small>
       </div>
       <div className="form-group last-item">
         <p>To:</p>
-        <h1>{flight.to.code}</h1>
-        <p className="bold">{flight.to.city}</p>
-        <small>{formatDateTime(flight.to.dateTime)}</small>
+        <h1>{props.flight.to.code}</h1>
+        <p className="bold">{props.flight.to.city}</p>
+        <small>{formatDateTime(props.flight.to.dateTime)}</small>
       </div>
       <div className="form-group">
         <p className="bold">Price from:</p>
-        <p>{flight.price}</p>
-        <button className="bold">Select</button>
+        <p>{props.flight.price}</p>
+        <button className="bold" onClick={() => props.openFlightHandler()}>
+          Select
+        </button>
       </div>
     </div>
   );
