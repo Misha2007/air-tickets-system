@@ -10,7 +10,7 @@ const FlightSearch = (props) => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-    }).format(date);
+    }).format(new Date(date));
   };
 
   const calculateDuration = (departure, arrival) => {
@@ -24,30 +24,30 @@ const FlightSearch = (props) => {
     <div className="flight">
       <div className="form-group">
         <p>From:</p>
-        <h1>{props.flight.from.code}</h1>
-        <p className="bold">{props.flight.from.city}</p>
-        <small>{formatDateTime(props.flight.from.dateTime)}</small>
+        <h1>{props.flight.saabumiskohtcode}</h1>
+        <p className="bold">{props.flight.saabumiskoht}</p>
+        <small>{formatDateTime(props.flight.lahkumiseaeg)}</small>
       </div>
       <div className="form-group">
-        <small>{props.flight.flightNumber}</small>
+        <small>{props.flight.flightnumber}</small>
         <i className="fa fa-plane"></i>
         <span className="arrow">&#x2192;</span>
         <small>
           {calculateDuration(
-            props.flight.from.dateTime,
-            props.flight.to.dateTime
+            props.flight.lahkumiseaeg,
+            props.flight.saabumiseaeg
           )}
         </small>
       </div>
       <div className="form-group last-item">
         <p>To:</p>
-        <h1>{props.flight.to.code}</h1>
-        <p className="bold">{props.flight.to.city}</p>
-        <small>{formatDateTime(props.flight.to.dateTime)}</small>
+        <h1>{props.flight.sihtkohtcode}</h1>
+        <p className="bold">{props.flight.sihtkoht}</p>
+        <small>{formatDateTime(props.flight.saabumiseaeg)}</small>
       </div>
       <div className="form-group">
         <p className="bold">Price from:</p>
-        <p>{props.flight.price}</p>
+        <p>{props.flight.hind}</p>
         <button className="bold" onClick={() => props.openFlightHandler()}>
           Select
         </button>
