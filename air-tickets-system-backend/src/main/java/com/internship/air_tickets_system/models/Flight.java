@@ -2,15 +2,20 @@ package com.internship.air_tickets_system.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+// import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
+@Table(name = "flight")
 public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String flightnumber;
 
     @Column(nullable = false)
@@ -26,16 +31,19 @@ public class Flight {
     private String sihtkohtcode;
 
     @Column(nullable = false)
-    private LocalDateTime lahkumiseaeg;  // Changed to LocalDateTime
+    private LocalDateTime lahkumiseaeg;
 
     @Column(nullable = false)
-    private LocalDateTime saabumiseaeg;  // Changed to LocalDateTime
+    private LocalDateTime saabumiseaeg;
 
     @Column(nullable = true)
     private double hind;
 
-    @Column(nullable = false)
-    private int istmed;
+    @OneToMany(mappedBy = "flight") 
+    @JsonManagedReference
+    private List<Seat> istmed;
+
+    // Getters and setters omitted for brevity
 
     public Long getId() {
         return id;
@@ -109,11 +117,13 @@ public class Flight {
         this.hind = hind;
     }
 
-    public int getIstmed() {
+    public List<Seat> getIstmed() {
         return istmed;
     }
 
-    public void setIstmed(int istmed) {
+    public void setIstmed(List<Seat> istmed) {
         this.istmed = istmed;
     }
+
+    
 }

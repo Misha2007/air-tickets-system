@@ -1,5 +1,4 @@
 import "./FlightSearch.css";
-import Flight from "./Flight";
 
 const FlightSearch = (props) => {
   const formatDateTime = (date) => {
@@ -48,7 +47,11 @@ const FlightSearch = (props) => {
       <div className="form-group">
         <p className="bold">Price from:</p>
         <p>{props.flight.hind}</p>
-        <button className="bold" onClick={() => props.openFlightHandler()}>
+        {console.log(props.flight)}
+        <button
+          className="bold"
+          onClick={() => props.openFlightHandler(props.flight)}
+        >
           Select
         </button>
       </div>

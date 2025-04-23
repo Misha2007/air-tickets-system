@@ -1,9 +1,10 @@
 package com.internship.air_tickets_system.controllers;
 
 import com.internship.air_tickets_system.models.Flight;
-import com.internship.air_tickets_system.repositories.FlightsRepository;
+import com.internship.air_tickets_system.repositories.FlightRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,10 @@ import java.util.stream.StreamSupport;
 @Controller
 public class FlightsController {
 
-    private final FlightsRepository flightsRepository;
+    private final FlightRepository flightsRepository;
 
     @Autowired
-    public FlightsController(FlightsRepository flightsRepository) {
+    public FlightsController(FlightRepository flightsRepository) {
         this.flightsRepository = flightsRepository;
     }
 
@@ -50,14 +51,14 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         .filter(s -> s.getSaabumiskoht().equalsIgnoreCase(Saabumiskoht)
                 && s.getSihtkoht().equalsIgnoreCase(Sihtkoht)
                 && s.getLahkumiseaeg().toLocalDate().isEqual(lahkumiseKuupaev) 
-                && s.getIstmed() >= Arv
+                && s.getIstmed().size() >= Arv
                 && (Hind == null || s.getHind() <= Hind)) 
         .collect(Collectors.toList());
 }
 
-    @GetMapping("/flights/{flightNumber}")
-    public Flight getFlightByNumber(@PathVariable String flightNumber) {
-        return flightsRepository.findById(flightNumber).orElse(null);
+    @GetMapping("/flights/{id}")
+    public ResponseEntity<Flight> getFlightByNumber(@PathVariable Long id) {
+        return ResponseEntity.ok().body(flightsRepository.findById(id).orElse(null));
     }
 
     @PostMapping("/add")
@@ -68,8 +69,7 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         @RequestParam String sihtkohtcode,
         @RequestParam LocalDateTime lahkumiseaeg,
         @RequestParam LocalDateTime saabumiseaeg,
-        @RequestParam double hind,
-        @RequestParam int istmed
+        @RequestParam double hind
     ) {
         String flightNumber = generateFlightNumber();
 
@@ -82,7 +82,6 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         flight.setLahkumiseaeg(lahkumiseaeg);
         flight.setSaabumiseaeg(saabumiseaeg);
         flight.setHind(hind);
-        flight.setIstmed(istmed);
 
         flightsRepository.save(flight);
         return "Saved";

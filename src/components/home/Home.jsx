@@ -13,6 +13,7 @@ const Home = () => {
 
   const [flights, setFlights] = useState([]);
   const [openFlight, setOpenFlight] = useState(false);
+  const [selectedFlight, setSelectedFlight] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -31,7 +32,7 @@ const Home = () => {
     try {
       console.log(queryParams);
       const response = await fetch(
-        `http://localhost:8090/flights/filtered?${queryParams}`
+        `http://localhost:8081/flights/filtered?${queryParams}`
       );
       if (!response.ok) {
         console.log(response);
@@ -45,14 +46,16 @@ const Home = () => {
     }
   };
 
-  const openFlightHandler = () => {
-    setOpenFlight(!openFlight);
+  const openFlightHandler = (flight) => {
+    setSelectedFlight(flight);
+    setOpenFlight(true);
+    console.log(flight);
   };
 
   return (
     <div id="page">
       {openFlight ? (
-        <Flight />
+        <Flight flight={selectedFlight} persons={formData.persons} />
       ) : (
         <div>
           <div id="main-page">
@@ -110,7 +113,7 @@ const Home = () => {
                 <FlightSearch
                   key={index}
                   flight={flight}
-                  openFlightHandler={openFlightHandler}
+                  openFlightHandler={() => openFlightHandler(flight)}
                 />
               ))}
             </div>
