@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin()
 @Controller
 public class FlightsController {
 

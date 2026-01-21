@@ -10,7 +10,7 @@ const Flight = (props) => {
 
   useEffect(() => {
     if (props.flight) {
-      fetch(`http://localhost:8081/seats/flight/${props.flight.id}`, {
+      fetch(`http://192.168.41.206:8081/seats/flight/${props.flight.id}`, {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",

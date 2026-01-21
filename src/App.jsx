@@ -6,7 +6,7 @@ import Header from "./components/header/Header";
 import Flight from "./components/home/Flight";
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,14 +28,13 @@ function App() {
 
   return (
     <div className="main">
-      <Flight flight={selectedFlight} persons={6}></Flight>
-      {/* {loading && <Preloader></Preloader>}
+      {loading && <Preloader></Preloader>}
       {!loading && (
         <div className="main-header">
           <Header />
           <Home></Home>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

@@ -32,7 +32,7 @@ const Home = () => {
     try {
       console.log(queryParams);
       const response = await fetch(
-        `http://localhost:8081/flights/filtered?${queryParams}`
+        `http://192.168.41.206:8081/flights/filtered?${queryParams}`
       );
       if (!response.ok) {
         console.log(response);
