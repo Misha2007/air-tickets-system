@@ -182,3 +182,104 @@
 .passenger-row.selected {
   color: #9cc6a0;
 }
+
+.seat-booking {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: rgba(129, 129, 129, 0.68);
+  border-radius: 12px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.passengers {
+  flex: 2;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.passengers h2 {
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Form styling */
+.passenger-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row input,
+.form-row select {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+}
+
+.form-row input::placeholder {
+  color: #888;
+}
+
+.form-row select {
+  cursor: pointer;
+}
+
+.seat-details {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.seat-details h2 {
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.seat-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.seat-details li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 15px;
+}
+
+.seat-details li:last-child {
+  border-bottom: none;
+}
+
+.seat-details strong {
+  color: #ffd369;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .seat-selection {
+    flex-direction: column;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}

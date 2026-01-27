@@ -34,14 +34,13 @@ public class FlightsController {
     }
 
 
-@GetMapping("/flights/filtered")
+    @GetMapping("/flights/filtered")
 @ResponseBody
 public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht, 
                                         @RequestParam String Sihtkoht, 
                                         @RequestParam String LahkumiseAeg, 
                                         @RequestParam int Arv, 
                                         @RequestParam(required = false) Double Hind) {
-    // Parse the date without time
     LocalDate lahkumiseKuupaev = LocalDate.parse(LahkumiseAeg, DateTimeFormatter.ISO_DATE);
 
     List<Flight> flightsList = StreamSupport.stream(flightsRepository.findAll().spliterator(), false)
@@ -58,8 +57,46 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
 
     @GetMapping("/flights/{id}")
     public ResponseEntity<Flight> getFlightByNumber(@PathVariable Long id) {
+        
         return ResponseEntity.ok().body(flightsRepository.findById(id).orElse(null));
     }
+
+
+    @GetMapping("/flights/date") 
+    public ResponseEntity<List<Flight>> getFlightsDates(@PathVariable String datetimeStr) {
+        // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
+        LocalDateTime datetime = LocalDateTime.parse(datetimeStr);
+        List<Flight> flights = flightsRepository.findByDepartureTime(datetime);
+        return ResponseEntity.ok(flights);
+        // @Query("SELECT ")
+        // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
+    }
+
+
+    // @GetMapping("/flights/from") 
+    // public ResponseEntity<List<Flight>> getFlightsDates(@PathVariable String datetimeStr) {
+    //     // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
+    //     System.out.println("Looking for the going flights");
+    //     LocalDateTime datetime = LocalDateTime.parse(datetimeStr);
+    //     List<Flight> flights = flightsRepository.findByDepartureTime(datetime);
+    //     return ResponseEntity.ok(flights);
+    //     // @Query("SELECT ")
+    //     // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
+    // }
+
+    // @GetMapping("/from")
+    // public ResponseEntity<List<City>> createSeats() {
+    //     System.out.println("Looking for all cities");
+        
+    //     return ResponseEntity.ok().body(cityRepository.findAll()); 
+    // }
+
+    //  @GetMapping("/flights/airport/{saabumislennujid}") 
+    // public ResponseEntity<List<Flight>> getFlightsByAirport(@PathVariable Long saabumislennujid) {
+    //     System.out.println("Looking for flight with saabumislennujid: " + saabumislennujid);
+    //     List<Flight> flights = flightsRepository.findBysaabumislennuJId_Id(saabumislennujid);
+    //     return ResponseEntity.ok(flights);
+    // }
 
     @PostMapping("/add")
     public @ResponseBody String addNewFlight(

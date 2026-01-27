@@ -59,6 +59,14 @@ button {
   font-family: "Josefin Slab";
 }
 
+button:hover {
+  background-color: #993c2f;
+}
+
+button:focus {
+  background-color: #3b140e;
+}
+
 .last-item {
   padding-right: 50px;
   border-right: #ffffff 2px solid;

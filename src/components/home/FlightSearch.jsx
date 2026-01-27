@@ -34,7 +34,7 @@ const FlightSearch = (props) => {
         <small>
           {calculateDuration(
             props.flight.lahkumiseaeg,
-            props.flight.saabumiseaeg
+            props.flight.saabumiseaeg,
           )}
         </small>
       </div>
@@ -50,7 +50,7 @@ const FlightSearch = (props) => {
         {console.log(props.flight)}
         <button
           className="bold"
-          onClick={() => props.openFlightHandler(props.flight)}
+          onClick={() => props.openFlightHandler(props.flight.id)}
         >
           Select
         </button>

@@ -4,7 +4,7 @@ import "./Header.css"; // Import styles if needed
 const Header = () => {
   return (
     <header className="header">
-      <h1>My Website</h1>
+      <h1>Flight ticket search</h1>
       <nav>
         <ul>
           <li>
