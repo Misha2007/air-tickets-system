@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 import com.internship.air_tickets_system.models.Flight;
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    @Query("SELECT f FROM Flight f WHERE f.lahkumiseaeg = :datetime")
-    List<Flight> findByDepartureTime(@Param("datetime") LocalDateTime datetime);
+    // @Query("SELECT f FROM flight f WHERE f.lahkumiseaeg = :datetime")
+    // List<Flight> findByDepartureTime(@Param("datetime") LocalDateTime datetime);
 
 
     // Dont forget to add _Id to the end of method name, if you're using ID just findBysaabumislennuJID won't work you have to have it ending with _Id
@@ -21,6 +21,9 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     List<String> findDistinctSaabumiskoht();
 
     
+    
+    @Query(value = "SELECT f.sihtkoht FROM flight f WHERE f.saabumiskoht = :saabumiskoht", nativeQuery = true)
+    List<String> findBySihtkoht(String saabumiskoht);
 
 }
 

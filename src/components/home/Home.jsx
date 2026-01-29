@@ -27,8 +27,6 @@ const Home = () => {
 
   const [isFocus, setIsFocus] = useState(false);
 
-  const [textData, setTextData] = useState({ text: "" });
-
   const [formData, setFormData] = useState({
     arrival: "",
     destination: "",
@@ -69,27 +67,34 @@ const Home = () => {
     SaabumiskohtCall();
   }, []);
 
-  // const ToCall = async () => {
+  const ToCall = async () => {
+    const ToParams = new URLSearchParams({
+      Saabumiskoht: inputValue,
+    }).toString();
 
-  //     try {
-  //       console.log(inputValue);
-  //       const response = await fetch(`http://192.168.41.206:8081/flights/to${inputValue}`, {
-  //         method: "GET",
-  //       });
+    console.log("Tell me it is working");
+    try {
+      console.log(inputValue);
+      const response = await fetch(
+        `http://192.168.41.206:8081/flights/to?${ToParams}`,
+        {
+          method: "GET",
+        },
+      );
 
-  //       if (response.ok) {
-  //         console.log("From is working, this is the response");
-  //         const data = await response.json();
-  //         setTosuggestions(data);
-  //       }
+      if (response.ok) {
+        console.log("From is working, this is the response");
+        const data = await response.json();
+        setTosuggestions(data);
+      }
 
-  //       if (!response.ok) {
-  //         console.log(response);
-  //       }
-  //     } catch (error) {
-  //       console.error(" Error  fetching flights:", error);
-  //     }
-  //   }
+      if (!response.ok) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(" Error  fetching flights:", error);
+    }
+  };
 
   //   if (response.ok) {
   //     console.log("From is working, this is the response");
@@ -102,13 +107,13 @@ const Home = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   // This runs when the input field has been changed
-  //   if (inputValue in suggestions) {
-  //     // ToCall()
-  //     console.log("Hell yea");
-  //   }
-  // }, [setInputValue]);
+  useEffect(() => {
+    // This runs when the input field has been changed
+    if (suggestions.includes(inputValue)) {
+      ToCall();
+      console.log("The useEffect clause ran");
+    }
+  }, [inputValue, suggestions]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -117,28 +122,28 @@ const Home = () => {
   // useEffect(() => {}, [DateCall]);
 
   // Searching for cities, when user enters text into input field
-  const searchCities = async (e) => {
-    e.preventDefault();
+  // const searchCities = async (e) => {
+  //   e.preventDefault();
 
-    const textParams = new URLSearchParams({
-      text: textData.text || "",
-    }).toString();
+  //   const textParams = new URLSearchParams({
+  //     text: textData.text || "",
+  //   }).toString();
 
-    try {
-      console.log(queryParams);
-      const response = await fetch(
-        `http://192.168.41.206:8081/city/text?${textParams}`,
-      );
-      if (!response.ok) {
-        console.log(response);
-      }
+  //   try {
+  //     console.log(queryParams);
+  //     const response = await fetch(
+  //       `http://192.168.41.206:8081/city/text?${textParams}`,
+  //     );
+  //     if (!response.ok) {
+  //       console.log(response);
+  //     }
 
-      const matchedCities = await response.json();
-      console.log(matchedCities);
-    } catch (error) {
-      console.error(" Error  fetching flights:", error);
-    }
-  };
+  //     const matchedCities = await response.json();
+  //     console.log(matchedCities);
+  //   } catch (error) {
+  //     console.error(" Error  fetching flights:", error);
+  //   }
+  // };
 
   ///////////////////////////////////////
   const searchFlights = async (e) => {
@@ -382,11 +387,7 @@ const Home = () => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="date">Date:</label>
-                  <input
-                    id="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                  />
+
                   <DatePicker
                     selected={date}
                     includeDates={[

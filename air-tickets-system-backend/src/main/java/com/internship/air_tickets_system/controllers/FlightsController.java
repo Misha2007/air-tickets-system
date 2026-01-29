@@ -81,6 +81,15 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         return ResponseEntity.ok(flights);
     }
 
+    @GetMapping("/flights/to") 
+    public ResponseEntity<List<String>> GetAllSihtkohad(@RequestParam String Saabumiskoht) {
+        System.out.println("Looking for where the spcific input flight is going");
+        List<String> flights = flightsRepository.findBySihtkoht(Saabumiskoht);
+        return ResponseEntity.ok(flights);
+    }
+
+
+
     // @GetMapping("/from")
     // public ResponseEntity<List<City>> createSeats() {
     //     System.out.println("Looking for all cities");
