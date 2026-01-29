@@ -15,4 +15,12 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     // Dont forget to add _Id to the end of method name, if you're using ID just findBysaabumislennuJID won't work you have to have it ending with _Id
     List<Flight> findBysaabumislennuJId_Id(Long saabumislennuJId);
+
+
+    @Query(value = "SELECT DISTINCT f.saabumiskoht FROM flight f", nativeQuery = true)
+    List<String> findDistinctSaabumiskoht();
+
+    
+
 }
+

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Home.css";
 import FlightSearch from "./FlightSearch";
 import Flight from "./Flight";
@@ -15,6 +15,18 @@ const Home = () => {
   const [showDropdown2, setShowdown2] = useState(false);
   const [date, setDate] = useState(new Date());
 
+  // const suggestions = ["London", "Tallinn", "Paris"];
+
+  const [suggestions, setsuggestions] = useState([]);
+  const [suggestionsTo, setTosuggestions] = useState([]);
+
+  const [isHovered, setIsHovered] = useState(false);
+  const inputRef = useRef();
+  const [inputValue, setInputValue] = useState("Tallinn");
+  const [inputValue2, setInputValue2] = useState("Tallinn");
+
+  const [isFocus, setIsFocus] = useState(false);
+
   const [textData, setTextData] = useState({ text: "" });
 
   const [formData, setFormData] = useState({
@@ -24,6 +36,7 @@ const Home = () => {
     persons: 1,
   });
 
+  /* not in use right now
   const DateCall = async () => {
     const response = await fetch(`http://192.168.41.206:8081/flights/date`, {
       method: "GET",
@@ -34,22 +47,74 @@ const Home = () => {
     }
   };
 
+  */
   // Trying to find all of the flights that are starting from a certain place
   const SaabumiskohtCall = async () => {
     const response = await fetch(`http://192.168.41.206:8081/flights/from`, {
       method: "GET",
-    }).then((response) => response.json());
+    });
 
     if (response.ok) {
-      console.log("From is working, this is the response", data);
+      console.log("From is working, this is the response");
+      const data = await response.json();
+      setsuggestions(data);
+    }
+
+    if (!response.ok) {
+      console.error("Failed at fetching the saabumis");
     }
   };
 
-  useEffect(() => {}, [DateCall]);
+  useEffect(() => {
+    SaabumiskohtCall();
+  }, []);
+
+  // const ToCall = async () => {
+
+  //     try {
+  //       console.log(inputValue);
+  //       const response = await fetch(`http://192.168.41.206:8081/flights/to${inputValue}`, {
+  //         method: "GET",
+  //       });
+
+  //       if (response.ok) {
+  //         console.log("From is working, this is the response");
+  //         const data = await response.json();
+  //         setTosuggestions(data);
+  //       }
+
+  //       if (!response.ok) {
+  //         console.log(response);
+  //       }
+  //     } catch (error) {
+  //       console.error(" Error  fetching flights:", error);
+  //     }
+  //   }
+
+  //   if (response.ok) {
+  //     console.log("From is working, this is the response");
+  //     const data = await response.json();
+  //     setsuggestions(data);
+  //   }
+
+  //   if (!response.ok) {
+  //     console.error("Failed at fetching the saabumis");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // This runs when the input field has been changed
+  //   if (inputValue in suggestions) {
+  //     // ToCall()
+  //     console.log("Hell yea");
+  //   }
+  // }, [setInputValue]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  // useEffect(() => {}, [DateCall]);
 
   // Searching for cities, when user enters text into input field
   const searchCities = async (e) => {
@@ -141,7 +206,7 @@ const Home = () => {
     }));
 
     if (!value) {
-      setShowDropdown(false);
+      setShowdown(false);
       return;
     }
 
@@ -150,7 +215,7 @@ const Home = () => {
     );
 
     setFilteredLocations(matches);
-    setShowDropdown(true);
+    setShowdown(true);
   };
 
   // For closing the form
@@ -160,7 +225,7 @@ const Home = () => {
       arrival: location,
     }));
 
-    setShowDropdown(false);
+    setShowdown(false);
   };
 
   const selectDestination = (location) => {
@@ -169,7 +234,7 @@ const Home = () => {
       destination: location,
     }));
 
-    setShowDropdown2(false);
+    setShowdown2(false);
   };
 
   return (
@@ -181,7 +246,7 @@ const Home = () => {
           <div id="main-page">
             <div className="form-container">
               <form onSubmit={searchFlights}>
-                <div className="form-group" style={{ position: "relative" }}>
+                {/* <div className="form-group" style={{ position: "relative" }}>
                   <label htmlFor="arrival">From:</label>
                   <input
                     id="arrival"
@@ -200,28 +265,121 @@ const Home = () => {
                       ))}
                     </ul>
                   )}
-                </div>
+                </div> */}
 
+                {/* <label htmlFor="destination">To:</label>
+                <input
+                  id="destination"
+                  type="text"
+                  value={formData.destination}
+                  onChange={handleChange}
+                /> */}
+
+                {/* Part for implementing the suggestive input field: https://github.com/Chensokheng/react-auto-suggestion/blob/master/src/App.js */}
                 <div className="form-group">
-                  <label htmlFor="destination">To:</label>
+                  <label htmlFor="haventdecided_yet">From: </label>
                   <input
-                    id="destination"
-                    type="text"
-                    value={formData.destination}
-                    onChange={handleChange}
+                    className="w-full focus:outline-none border-2 p-5"
+                    placeholder="Enter your desired location"
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => {
+                      if (!isHovered) {
+                        setIsFocus(false);
+                      }
+                    }}
+                    value={inputValue}
+                    onChange={(e) => {
+                      setInputValue(e.target.value);
+                    }}
+                    ref={inputRef}
                   />
-
-                  {showDropdown2 && (
-                    <ul className="dropdown">
-                      {locations2.map((loc, index) => (
-                        <li key={index} onClick={() => selectDestination(loc)}>
-                          {loc}
-                        </li>
-                      ))}
-                    </ul>
+                  {isFocus && (
+                    <div
+                      className="shadow-lg absolute w-full"
+                      onMouseEnter={() => {
+                        setIsHovered(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsHovered(false);
+                      }}
+                    >
+                      {suggestions.map((suggestion, index) => {
+                        const isMatch =
+                          suggestion
+                            .toLowerCase()
+                            .indexOf(inputValue.toLowerCase()) > -1;
+                        return (
+                          <div key={index}>
+                            {isMatch && (
+                              <div
+                                className="p-5 hover:bg-gray-200 cursor-pointer"
+                                onClick={() => {
+                                  setInputValue(suggestion);
+                                  inputRef.current.focus();
+                                }}
+                              >
+                                {suggestion}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   )}
                 </div>
 
+                {/* Other input field should go here*/}
+                <div className="form-group">
+                  <label>To: </label>
+                  <input
+                    className="w-full focus:outline-none border-2 p-5"
+                    placeholder="Enter your desired location"
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => {
+                      if (!isHovered) {
+                        setIsFocus(false);
+                      }
+                    }}
+                    value={inputValue2}
+                    onChange={(e) => {
+                      setInputValue2(e.target.value);
+                    }}
+                    ref={inputRef}
+                  />
+                  {isFocus && (
+                    <div
+                      className="shadow-lg absolute w-full"
+                      onMouseEnter={() => {
+                        setIsHovered(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsHovered(false);
+                      }}
+                    >
+                      {suggestionsTo.map((suggestionTo, index) => {
+                        const isMatch =
+                          suggestionTo
+                            .toLowerCase()
+                            .indexOf(inputValue2.toLowerCase()) > -1;
+                        return (
+                          <div key={index}>
+                            {isMatch && (
+                              <div
+                                className="p-5 hover:bg-gray-200 cursor-pointer"
+                                onClick={() => {
+                                  setInputValue2(suggestionTo);
+                                  inputRef.current.focus();
+                                }}
+                              >
+                                {suggestionTo}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
                 <div className="form-group">
                   <label htmlFor="date">Date:</label>
                   <input

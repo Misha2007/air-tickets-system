@@ -5,43 +5,38 @@ import PasSeatInfo from "./UI/PasSeatInfo";
 const SelectedSeats = (props) => {
   const columns = ["A", "B", "C", "D"];
   console.log(props.passengerWSeat);
-  //   useEffect(() => {
-  //     if (props.flightId) {
-  //       fetch(`http://192.168.41.206:8081/seats/flight/${props.flightId}`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Access-Control-Allow-Origin": "*",
-  //         },
-  //       })
-  //         .then((response) => response.json())
-  //         .then((data) => {
-  //           console.log(data);
-  //           setSeats(data);
-  //           setRows(Math.ceil(data.length / columns.length));
-  //           const preselected = {};
+  // const [passenger, setPassenger]
 
-  //           for (let index = 0; index < props.persons; index++) {
-  //             const seat = data
-  //               .filter((seat) => seat.vaba)
-  //               .slice(index, index + 1)
-  //               .map((seat) => {
-  //                 const seatIndex = seat.number - 1;
-  //                 const row = Math.floor(seatIndex / columns.length) + 1;
-  //                 const col = columns[seatIndex % columns.length];
-  //                 return `${row}${col}`;
-  //               })[0];
-  //             preselected[index + 1] = seat;
-  //           }
-  //           setSelectedSeats(preselected);
-  //         })
-  //         .catch((error) => console.error("Error fetching seats:", error));
-  //     }
-  //   }, [props.flightId]);
+  const createPassengerBooking = async (passenger) => {
+    try {
+      const response = await fetch(
+        `http://192.168.41.206:8081/passenger-booking/create`,
+        {
+          method: "POST",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(passenger),
+        },
+      );
+      const data = await response.json();
+      console.log("Response Data:", response);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div>
       {props.passengerWSeat.map((pWSeat, index) => (
-        <PasSeatInfo pWSeat={pWSeat} key={index} />
+        <PasSeatInfo
+          pWSeat={pWSeat}
+          createPassengerBooking={createPassengerBooking}
+          key={index}
+        />
       ))}
     </div>
   );

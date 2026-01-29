@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "passenger")
@@ -14,25 +16,31 @@ public class Passenger implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column()
+    @Column(nullable = false)
     private String reisijaENimi;
     
-    @Column()
+    @Column(nullable = false)
     private String reisijaPNimi;
 
-    @Column()
-    private String synniP;
+    @Column(nullable = false)
+    private LocalDate synniP;
 
-    @Column()
+    @Column(nullable = false, unique = true)
     private String telefon;
 
-    @Column()
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column()
+    @Column(nullable = false)
     private String sugu;
 
-    public Passenger(Long id, String reisijaENimi, String reisijaPNimi, String synniP, String telefon, String email, String sugu) {
+    @Column(nullable = false, unique = true, length = 255)
+    private String national_id_hash;
+
+    @Column(nullable = false, length = 2)
+    private String country_id;
+
+    public Passenger(Long id, String reisijaENimi, String reisijaPNimi, LocalDate synniP, String telefon, String email, String sugu, String national_id_hash, String country_id) {
         this.id = id;
         this.reisijaENimi = reisijaENimi;
         this.reisijaPNimi = reisijaPNimi;
@@ -40,6 +48,8 @@ public class Passenger implements Serializable {
         this.telefon = telefon;
         this.email = email;
         this.sugu = sugu;
+        this.national_id_hash = national_id_hash;
+        this.country_id = country_id;
     }
 
     public Passenger() {
@@ -69,11 +79,11 @@ public class Passenger implements Serializable {
         this.reisijaPNimi = reisijaPNimi;
     }
 
-    public String getSynniP() {
+    public LocalDate getSynniP() {
         return synniP;
     }
 
-    public void setSynniP(String synniP) {
+    public void setSynniP(LocalDate synniP) {
         this.synniP = synniP;
     }
 
@@ -99,5 +109,22 @@ public class Passenger implements Serializable {
 
     public void setSugu(String sugu) {
         this.sugu = sugu;
+    }
+
+    public String getCountryId() {
+        return country_id;
+    }
+
+    public void setCountryId(String country_id){
+        this.country_id = country_id;
+    }
+
+
+    public String getNationalIdHash() {
+        return country_id;
+    }
+
+    public void setNationalIdHash(String national_id_hash){
+        this.national_id_hash = national_id_hash;
     }
 }

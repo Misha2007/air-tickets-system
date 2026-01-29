@@ -283,3 +283,34 @@
     flex-direction: column;
   }
 }
+
+.baggage-info p {
+  font-size: medium;
+}
+
+.baggage-options {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, auto);
+}
+
+.baggage-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.baggage-info h4 {
+  margin: 0 0 6px;
+}
+
+.baggage-card.selected {
+  border: 1px solid #0b4481ff;
+}
+
+.baggage-card:hover {
+  border-color: #007bff;
+}

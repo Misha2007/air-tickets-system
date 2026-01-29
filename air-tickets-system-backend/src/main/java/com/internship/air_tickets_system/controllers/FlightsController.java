@@ -62,27 +62,24 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
     }
 
 
-    @GetMapping("/flights/date") 
-    public ResponseEntity<List<Flight>> getFlightsDates(@PathVariable String datetimeStr) {
-        // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
-        LocalDateTime datetime = LocalDateTime.parse(datetimeStr);
-        List<Flight> flights = flightsRepository.findByDepartureTime(datetime);
-        return ResponseEntity.ok(flights);
-        // @Query("SELECT ")
-        // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
-    }
-
-
-    // @GetMapping("/flights/from") 
+    // @GetMapping("/flights/date") 
     // public ResponseEntity<List<Flight>> getFlightsDates(@PathVariable String datetimeStr) {
     //     // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
-    //     System.out.println("Looking for the going flights");
     //     LocalDateTime datetime = LocalDateTime.parse(datetimeStr);
     //     List<Flight> flights = flightsRepository.findByDepartureTime(datetime);
     //     return ResponseEntity.ok(flights);
     //     // @Query("SELECT ")
     //     // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
     // }
+
+
+    @GetMapping("/flights/from") 
+    public ResponseEntity<List<String>> getDistinctSaabumiskohad() {
+        // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
+        System.out.println("Looking for the going flights");
+        List<String> flights = flightsRepository.findDistinctSaabumiskoht();
+        return ResponseEntity.ok(flights);
+    }
 
     // @GetMapping("/from")
     // public ResponseEntity<List<City>> createSeats() {
