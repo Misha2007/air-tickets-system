@@ -2,9 +2,14 @@ package com.internship.air_tickets_system.models;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "booking")
@@ -18,9 +23,9 @@ public class Booking implements Serializable {
         IN_PROGRESS, SUCCESS, FAILED;
     }
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StaatusEnum staatus;
+    private StaatusEnum staatus = StaatusEnum.IN_PROGRESS;
 
     public Booking(Long id, StaatusEnum staatus) {
         this.id = id;

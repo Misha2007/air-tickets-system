@@ -75,6 +75,11 @@ const Flight = (props) => {
   };
 
   const isSeatAvailable = (seatNumber) => {
+    const d = !seats.some(
+      (seat) =>
+        seat.number === seatNumber && !seat.vaba && console.log("sdkjf"),
+    );
+
     return !seats.some((seat) => seat.number === seatNumber && !seat.vaba);
   };
 
@@ -82,42 +87,6 @@ const Flight = (props) => {
     <>
       {!selectedSeatsB ? (
         <div className="seat-selection">
-          <div className="passengers">
-            <h2>Passengers</h2>
-            <div>
-              {Array.from({ length: props.persons }).map((_, index) => (
-                <div key={index}>
-                  <div className="passengers-container selected">
-                    <div className="passenger-square">
-                      <span className="seat-text">P{index + 1}</span>
-                    </div>
-                    {index + 1 == selectedPassenger ? (
-                      <p key={index} className="passenger-row selected">
-                        Passenger {index + 1}
-                      </p>
-                    ) : (
-                      <p key={index} className="passenger-row">
-                        Passenger {index + 1}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="passenger-info">
-                    {index + 1 == selectedPassenger ? (
-                      <strong>Selected</strong>
-                    ) : null}
-                    {/* <button onClick={() => setSelectedPassenger(index + 1)}>
-                  Select
-                </button> */}
-                    <span>
-                      Seat:
-                      {" " + selectedSeats[index + 1]}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
           <div className="airplane">
             <div className="cockpit">
               <h1>Cockpit</h1>
@@ -138,16 +107,20 @@ const Flight = (props) => {
                 {[...Array(rows)].map((_, rowIndex) => (
                   <li className="row" key={rowIndex}>
                     {columns.map((col) => {
+                      const seatIndex =
+                        rowIndex * columns.length + columns.indexOf(col);
+                      const seat = seats[seatIndex];
                       const seatNumber = `${rowIndex + 1}${col}`;
                       const isSelected =
                         Object.values(selectedSeats).includes(seatNumber);
 
                       const isAvailable = isSeatAvailable(seatNumber);
+
                       return (
                         <label
                           key={`${rowIndex}${col}`}
-                          className={`seat-label ${isSelected ? "selected" : ""} ${
-                            !isAvailable ? "disabled" : ""
+                          className={`seat-label${isSelected ? " selected" : ""} ${
+                            !seat.vaba ? "disabled" : ""
                           }`}
                         >
                           <input
@@ -188,28 +161,67 @@ const Flight = (props) => {
               <h2>Tail</h2>
             </div>
           </div>
-          <div className="passengers">
-            <h2>Passengers</h2>
-            <div className="passengers-container selected">
-              <div className="passenger-square"></div>
-              <p className="passenger-row">Yours</p>
+
+          <div className="passengers cont">
+            <div className="passengers">
+              <h2>Passengers</h2>
+              <div className="passengers-container selected">
+                <div className="passenger-square"></div>
+                <p className="passenger-row">Yours</p>
+              </div>
+              <div className="passengers-container available">
+                <div className="passenger-square"></div>
+                <p className="passenger-row">Available</p>
+              </div>
+              <div className="passengers-container taken">
+                <div className="passenger-square"></div>
+                <p className="passenger-row">Taken</p>
+              </div>
             </div>
-            <div className="passengers-container available">
-              <div className="passenger-square"></div>
-              <p className="passenger-row">Available</p>
+            <div className="passengers">
+              <h2>Passengers</h2>
+              <div>
+                {Array.from({ length: props.persons }).map((_, index) => (
+                  <div key={index}>
+                    <div className="passengers-container selected">
+                      <div className="passenger-square">
+                        <span className="seat-text">P{index + 1}</span>
+                      </div>
+                      {index + 1 == selectedPassenger ? (
+                        <p key={index} className="passenger-row selected">
+                          Passenger {index + 1}
+                        </p>
+                      ) : (
+                        <p key={index} className="passenger-row">
+                          Passenger {index + 1}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="passenger-info">
+                      {index + 1 == selectedPassenger ? (
+                        <strong>Selected</strong>
+                      ) : null}
+                      {/* <button onClick={() => setSelectedPassenger(index + 1)}>
+                  Select
+                </button> */}
+                      <span>
+                        Seat:
+                        {" " + selectedSeats[index + 1]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="passengers-container taken">
-              <div className="passenger-square"></div>
-              <p className="passenger-row">Taken</p>
-            </div>
+            <button
+              onClick={() => {
+                setSelectedSeatsB(true);
+              }}
+            >
+              Continue
+            </button>
           </div>
-          <button
-            onClick={() => {
-              setSelectedSeatsB(true);
-            }}
-          >
-            Continue
-          </button>
         </div>
       ) : (
         <SelectedSeats passengerWSeat={pasPerSeat} />

@@ -1,20 +1,26 @@
 package com.internship.air_tickets_system.controllers;
 
-import com.internship.air_tickets_system.models.Seat;
-import com.internship.air_tickets_system.models.Passenger;
-import com.internship.air_tickets_system.models.PassengerBooking;
-import com.internship.air_tickets_system.repositories.SeatRepository;
-import com.internship.air_tickets_system.repositories.PassengerBookingRepository;
-import com.internship.air_tickets_system.repositories.PassengerRepository;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
 
-
-
-import java.util.List;
+import com.internship.air_tickets_system.models.Baggage;
+import com.internship.air_tickets_system.models.Booking;
+import com.internship.air_tickets_system.models.Passenger;
+import com.internship.air_tickets_system.models.PassengerBooking;
+import com.internship.air_tickets_system.models.Seat;
+import com.internship.air_tickets_system.repositories.BaggageRepository;
+import com.internship.air_tickets_system.repositories.BookingRepository;
+import com.internship.air_tickets_system.repositories.PassengerBookingRepository;
+import com.internship.air_tickets_system.repositories.PassengerRepository;
+import com.internship.air_tickets_system.repositories.SeatRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -24,6 +30,12 @@ public class PassengerBookingController {
     private PassengerBookingRepository passengerBookingRepository;
     @Autowired
     private PassengerRepository passengerRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private SeatRepository seatRepository;
+    @Autowired
+    private BaggageRepository baggageRepository;
 
     public static class PassengerRequest {
 
@@ -43,8 +55,9 @@ public class PassengerBookingController {
 
         private String nationalId;
 
-   
+        private Long seatId;
 
+        private Long baggageId;
 
         public String getReisijaENimi() {
             return reisijaENimi;
@@ -109,48 +122,67 @@ public class PassengerBookingController {
         public void setNationalId(String nationalId) {
             this.nationalId = nationalId;
         }
+
+        public Long getSeatId() {
+            return seatId;
+        }
+
+        public void setSeatId(Long seatId) {
+            this.seatId = seatId;
+        }
+
+        public Long getBaggageId() {
+            return baggageId;
+        }
+
+        public void setBaggageId(Long baggageId) {
+            this.baggageId = baggageId;
+        }
     };
 
 
     @PostMapping("/create")
-    public ResponseEntity<List<PassengerBooking>> createSeats(@RequestBody PassengerRequest passengerRequest) {
-        System.out.println(passengerRequest.getCountryId());
-        Passenger passenger = new Passenger();
-        passenger.setReisijaENimi(passengerRequest.getReisijaENimi());
-        passenger.setReisijaPNimi(passengerRequest.getReisijaPNimi());
-        passenger.setSynniP(passengerRequest.getSynniP());
-        passenger.setTelefon(passengerRequest.getTelefon());
-        passenger.setEmail(passengerRequest.getEmail());
-        passenger.setSugu(passengerRequest.getSugu());
-        passenger.setCountryId(passengerRequest.getCountryId());
-        passenger.setNationalIdHash(passengerRequest.getNationalId());
-        System.out.println(passenger);
+    public ResponseEntity<List<PassengerBooking>> createSeats(@RequestBody List<PassengerRequest> passengerRequests) {
+        Booking booking = new Booking();
+        bookingRepository.save(booking);
+        for (PassengerRequest passengerRequest : passengerRequests) {
+            Passenger passenger = new Passenger();
+            passenger.setReisijaENimi(passengerRequest.getReisijaENimi());
+            passenger.setReisijaPNimi(passengerRequest.getReisijaPNimi());
+            passenger.setSynniP(passengerRequest.getSynniP());
+            passenger.setTelefon(passengerRequest.getTelefon());
+            passenger.setEmail(passengerRequest.getEmail());
+            passenger.setSugu(passengerRequest.getSugu());
+            passenger.setCountryId(passengerRequest.getCountryId());
+            passenger.setNationalIdHash(passengerRequest.getNationalId());
+            System.out.println(passenger);
+            passengerRepository.save(passenger);
 
-        passengerRepository.save(passenger);
-        // boolean isSeat = seatRepository.findById(passenger.).orElse(null);
-        // Flight flight = new Flight();
-        // flight.setFlightString(flightString);
-        // flight.setSaabumiskoht(saabumiskoht);
-        // flight.setSihtkoht(sihtkoht);
-        // flight.setSaabumiskohtcode(saabumiskohtcode);
-        // flight.setSihtkohtcode(sihtkohtcode);
-        // flight.setLahkumiseaeg(lahkumiseaeg);
-        // flight.setSaabumiseaeg(saabumiseaeg);
-        // flight.setHind(hind);
 
-        // flightsRepository.save(flight);
-        
-        // Flight flight = Passenger.findByName(id).orElse(null);
-        
-        // if (flight == null) {
-        //     throw new RuntimeException("Flight not found!");
-        // }
+            PassengerBooking passengerBooking = new PassengerBooking();
+            passengerBooking.setPassenger(passenger);
 
-        // for (int i = 1; i <= 20; i++) { 
-        //     Seat seat = new Seat(i, false, false, 1, flight, true); 
-        //     seatRepository.save(seat);
-        // }
-        
-        return ResponseEntity.ok().body(passengerBookingRepository.findAll()); 
+            Seat seat = seatRepository.findById(passengerRequest.getSeatId())
+                    .orElseThrow(() -> new RuntimeException("Seat not found"));
+            passengerBooking.setSeat(seat);
+
+            seat.setVaba(false);
+
+            seatRepository.save(seat);
+
+            Baggage baggage = baggageRepository.findById(passengerRequest.getBaggageId())
+                    .orElseThrow(() -> new RuntimeException("Baggage not found"));
+            passengerBookingRepository.save(passengerBooking);
+
+            passengerRepository.save(passenger);
+            passengerBooking.setSeat(seat);
+            passengerBooking.setBaggage(baggage);
+            passengerBooking.setBooking(booking);
+
+            passengerBookingRepository.save(passengerBooking);
+        }
+
+        List<PassengerBooking> allBookings = passengerBookingRepository.findByBookingId(booking.getId());
+        return ResponseEntity.ok(allBookings);
     }
 }

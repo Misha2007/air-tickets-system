@@ -1,29 +1,48 @@
 import "./Flight.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PasSeatInfo from "./UI/PasSeatInfo";
+import { useNavigate } from "react-router-dom";
 
-const SelectedSeats = (props) => {
-  const columns = ["A", "B", "C", "D"];
-  console.log(props.passengerWSeat);
-  // const [passenger, setPassenger]
+const SelectedSeats = ({ passengerWSeat }) => {
+  const [passengers, setPassengers] = useState(
+    passengerWSeat.map((pWSeat) => ({
+      seatId: pWSeat.seat.id,
+      baggageId: 1,
+      reisijaENimi: "",
+      reisijaPNimi: "",
+      email: "",
+      telefon: "",
+      synniP: "",
+      sugu: "",
+      countryId: "",
+      nationalId: "",
+    })),
+  );
 
-  const createPassengerBooking = async (passenger) => {
+  const navigate = useNavigate();
+
+  const updatePassenger = (index, passengerData) => {
+    setPassengers((prev) => {
+      const newArr = [...prev];
+      newArr[index] = passengerData;
+      return newArr;
+    });
+  };
+
+  const submitAllPassengers = async () => {
     try {
+      console.log(passengers);
       const response = await fetch(
         `http://192.168.41.206:8081/passenger-booking/create`,
         {
           method: "POST",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(passenger),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(passengers),
         },
       );
       const data = await response.json();
-      console.log("Response Data:", response);
+      console.log("All passengers saved:", data);
+      navigate("/thanks");
     } catch (err) {
       console.error(err);
     }
@@ -31,13 +50,23 @@ const SelectedSeats = (props) => {
 
   return (
     <div>
-      {props.passengerWSeat.map((pWSeat, index) => (
-        <PasSeatInfo
-          pWSeat={pWSeat}
-          createPassengerBooking={createPassengerBooking}
-          key={index}
-        />
-      ))}
+      <div className="seat-booking">
+        {passengerWSeat.map((pWSeat, index) => (
+          <PasSeatInfo
+            key={index}
+            pWSeat={pWSeat}
+            passengerData={passengers[index]}
+            setPassengerData={(data) => updatePassenger(index, data)}
+          />
+        ))}
+
+        <button
+          onClick={submitAllPassengers}
+          disabled={passengers.length > passengerWSeat.length}
+        >
+          Submit All Passengers
+        </button>
+      </div>
     </div>
   );
 };

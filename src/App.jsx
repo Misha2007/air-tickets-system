@@ -6,6 +6,7 @@ import Header from "./components/header/Header";
 import Flight from "./components/home/Flight";
 import { Route, Routes } from "react-router-dom";
 import About from "./components/home/About";
+import ThanksPage from "./components/home/UI/ThanksPage";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -34,8 +35,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/flight" element={<Flight flightId={1} persons={6} />} />
+        <Route path="/flight" element={<Flight flightId={1} persons={2} />} />
         <Route path="/about" element={<About />} />
+        <Route path="/thanks" element={<ThanksPage />} />
       </Routes>
       {loading && <Preloader></Preloader>}
     </div>

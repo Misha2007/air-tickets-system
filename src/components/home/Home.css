@@ -45,7 +45,8 @@
   }
 }
 
-#main-page .form-container form {
+#main-page .form-container form,
+#main-page .form-container .thx {
   position: relative;
 
   align-items: center;
@@ -56,6 +57,17 @@
   color: #fff;
   border-radius: 20px;
   padding: 30px;
+}
+
+#main-page .form-container .thx {
+  text-align: center;
+  font-size: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  cursor: pointer;
 }
 
 .form-group {

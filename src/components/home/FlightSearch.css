@@ -40,9 +40,13 @@ h1 {
   line-height: 10%;
 }
 
-p {
+#no-found {
   font-size: 36px;
   line-height: 60%;
+}
+
+p {
+  font-size: 24px;
 }
 
 small {

@@ -1,11 +1,14 @@
 package com.internship.air_tickets_system.models;
 
 import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import jakarta.persistence.*;
 import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 
 @Entity
@@ -121,7 +124,7 @@ public class Passenger implements Serializable {
 
 
     public String getNationalIdHash() {
-        return country_id;
+        return national_id_hash;
     }
 
     public void setNationalIdHash(String national_id_hash){
