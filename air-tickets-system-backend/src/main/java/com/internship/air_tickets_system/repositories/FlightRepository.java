@@ -23,5 +23,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     @Query(value = "SELECT f.sihtkoht FROM flight f WHERE f.saabumiskoht = :saabumiskoht", nativeQuery = true)
     List<String> findBySihtkoht(String saabumiskoht);
 
+    @Query(value = "SELECT f.lahkumiseaeg FROM flight f WHERE f.saabumiskoht = :saabumiskoht AND f.sihtkoht = :sihtkoht", nativeQuery = true)
+    List<String> findBySihtkohtAndSaabumiskoht(String saabumiskoht, String sihtkoht);
+
 }
 

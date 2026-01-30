@@ -46,6 +46,7 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
     List<Flight> flightsList = StreamSupport.stream(flightsRepository.findAll().spliterator(), false)
                                              .collect(Collectors.toList());
 
+
     return flightsList.stream()
         .filter(s -> s.getSaabumiskoht().equalsIgnoreCase(Saabumiskoht)
                 && s.getSihtkoht().equalsIgnoreCase(Sihtkoht)
@@ -87,6 +88,15 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         List<String> flights = flightsRepository.findBySihtkoht(Saabumiskoht);
         return ResponseEntity.ok(flights);
     }
+
+
+    @GetMapping("/flights/destination") 
+    public ResponseEntity<List<String>> GetAllDates(@RequestParam String Saabumiskoht, @RequestParam String Sihtkoht) {
+        System.out.println("Find all of the dates that to/from combo has");
+        List<String> flights = flightsRepository.findBySihtkohtAndSaabumiskoht(Saabumiskoht, Sihtkoht);
+        return ResponseEntity.ok(flights);
+    }
+
 
 
 

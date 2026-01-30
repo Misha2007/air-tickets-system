@@ -5,6 +5,7 @@ import Flight from "./Flight";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
+
 const Home = () => {
   const [flights, setFlights] = useState([]);
   const [openFlight, setOpenFlight] = useState(false);
@@ -19,13 +20,23 @@ const Home = () => {
 
   const [suggestions, setsuggestions] = useState([]);
   const [suggestionsTo, setTosuggestions] = useState([]);
+  const [canFrom, setcanFrom] = useState(false)
+  const [saveDate, setsaveDate] = useState([])
 
+  // First 
   const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef();
   const [inputValue, setInputValue] = useState("Tallinn");
-  const [inputValue2, setInputValue2] = useState("Tallinn");
-
   const [isFocus, setIsFocus] = useState(false);
+
+  // Second
+  const [inputValue2, setInputValue2] = useState("");
+  const [isHovered2, setIsHovered2] = useState(false);
+  const inputRef2 = useRef();
+  const [isFocus2, setIsFocus2] = useState(false);
+
+  const [availableDates, setAvailableDates] = useState([])
+
 
   const [formData, setFormData] = useState({
     arrival: "",
@@ -96,6 +107,37 @@ const Home = () => {
     }
   };
 
+
+  const FromCall = async () => {
+    const ToParams = new URLSearchParams({
+      Saabumiskoht: inputValue,
+      Sihtkoht: inputValue2
+    }).toString();
+
+    console.log("Tell me it is working");
+    try {
+      console.log(inputValue);
+      const response = await fetch(
+        `http://192.168.41.206:8081/flights/destination?${ToParams}`,
+        {
+          method: "GET",
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("From is from working", data);
+        setAvailableDates(data.map(dateStr => new Date(dateStr)));
+      }
+
+      if (!response.ok) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(" Error  fetching flights:", error);
+    }
+  }
+
   //   if (response.ok) {
   //     console.log("From is working, this is the response");
   //     const data = await response.json();
@@ -110,49 +152,34 @@ const Home = () => {
   useEffect(() => {
     // This runs when the input field has been changed
     if (suggestions.includes(inputValue)) {
+      setcanFrom(true)
       ToCall();
       console.log("The useEffect clause ran");
     }
   }, [inputValue, suggestions]);
 
+
+
+  useEffect(() => {
+    if (canFrom && suggestionsTo.includes(inputValue2)) {
+      FromCall();
+      console.log("The from useeffect ran")
+    }
+  }, [inputValue2, suggestionsTo])
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // useEffect(() => {}, [DateCall]);
-
-  // Searching for cities, when user enters text into input field
-  // const searchCities = async (e) => {
-  //   e.preventDefault();
-
-  //   const textParams = new URLSearchParams({
-  //     text: textData.text || "",
-  //   }).toString();
-
-  //   try {
-  //     console.log(queryParams);
-  //     const response = await fetch(
-  //       `http://192.168.41.206:8081/city/text?${textParams}`,
-  //     );
-  //     if (!response.ok) {
-  //       console.log(response);
-  //     }
-
-  //     const matchedCities = await response.json();
-  //     console.log(matchedCities);
-  //   } catch (error) {
-  //     console.error(" Error  fetching flights:", error);
-  //   }
-  // };
 
   ///////////////////////////////////////
   const searchFlights = async (e) => {
     e.preventDefault();
 
     const queryParams = new URLSearchParams({
-      Saabumiskoht: formData.arrival || "",
-      Sihtkoht: formData.destination || "",
-      LahkumiseAeg: formData.date || "",
+      Saabumiskoht: inputValue || "",
+      Sihtkoht: inputValue2 || "",
+      LahkumiseAeg: date.toISOString().split('T')[0] || "",
       Arv: formData.persons || 1,
     }).toString();
 
@@ -181,66 +208,22 @@ const Home = () => {
 
   let locations = [];
 
-  useEffect(() => {
-    async function loadLocations() {
-      try {
-        const response = await fetch("http://192.168.41.206:8081/cities/all");
-        const data = await response.json();
+  // useEffect(() => {
+  //   async function loadLocations() {
+  //     try {
+  //       const response = await fetch("http://192.168.41.206:8081/cities/all");
+  //       const data = await response.json();
 
-        setLocations2(data.map((item) => item.linnNimi));
-        setShowdown(true);
-        console.log("What is up guys");
-      } catch (error) {
-        console.error("Failed to load locations:", error);
-      }
-    }
-    loadLocations();
-  }, []);
+  //       setLocations2(data.map((item) => item.linnNimi));
+  //       setShowdown(true);
+  //       console.log("What is up guys");
+  //     } catch (error) {
+  //       console.error("Failed to load locations:", error);
+  //     }
+  //   }
+  //   loadLocations();
+  // }, []);
   // -----------------------------------------------------------
-  const handleArrivalChange = (e) => {
-    const value = e.target.value;
-
-    setFormData((prev) => ({
-      ...prev,
-      arrival: value,
-    }));
-
-    setTextData((prev) => ({
-      ...prev,
-      text: value,
-    }));
-
-    if (!value) {
-      setShowdown(false);
-      return;
-    }
-
-    const matches = locations.filter((loc) =>
-      loc.toLowerCase().includes(value.toLowerCase()),
-    );
-
-    setFilteredLocations(matches);
-    setShowdown(true);
-  };
-
-  // For closing the form
-  const selectArrival = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      arrival: location,
-    }));
-
-    setShowdown(false);
-  };
-
-  const selectDestination = (location) => {
-    setFormData((prev) => ({
-      ...prev,
-      destination: location,
-    }));
-
-    setShowdown2(false);
-  };
 
   return (
     <div id="page">
@@ -338,27 +321,27 @@ const Home = () => {
                   <label>To: </label>
                   <input
                     className="w-full focus:outline-none border-2 p-5"
-                    placeholder="Enter your desired location"
-                    onFocus={() => setIsFocus(true)}
+                    placeholder="Enter your desired destination"
+                    onFocus={() => setIsFocus2(true)}
                     onBlur={() => {
-                      if (!isHovered) {
-                        setIsFocus(false);
+                      if (!isHovered2) {
+                        setIsFocus2(false);
                       }
                     }}
                     value={inputValue2}
                     onChange={(e) => {
                       setInputValue2(e.target.value);
                     }}
-                    ref={inputRef}
+                    ref={inputRef2}
                   />
-                  {isFocus && (
+                  {isFocus2 && (
                     <div
                       className="shadow-lg absolute w-full"
                       onMouseEnter={() => {
-                        setIsHovered(true);
+                        setIsHovered2(true);
                       }}
                       onMouseLeave={() => {
-                        setIsHovered(false);
+                        setIsHovered2(false);
                       }}
                     >
                       {suggestionsTo.map((suggestionTo, index) => {
@@ -373,7 +356,7 @@ const Home = () => {
                                 className="p-5 hover:bg-gray-200 cursor-pointer"
                                 onClick={() => {
                                   setInputValue2(suggestionTo);
-                                  inputRef.current.focus();
+                                  inputRef2.current.focus();
                                 }}
                               >
                                 {suggestionTo}
@@ -385,17 +368,16 @@ const Home = () => {
                     </div>
                   )}
                 </div>
+
+
+
+
                 <div className="form-group">
                   <label htmlFor="date">Date:</label>
 
                   <DatePicker
                     selected={date}
-                    includeDates={[
-                      new Date("2026-01-22"),
-                      new Date("2026-01-21"),
-                      new Date("2026-02-10"),
-                      new Date("2026-10-02"),
-                    ]}
+                    includeDates={availableDates}
                     onChange={(date) => setDate(date)}
                   />
                 </div>
