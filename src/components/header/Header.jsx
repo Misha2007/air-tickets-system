@@ -22,9 +22,6 @@ const Header = () => {
           <li>
             <a href="/about">About</a>
           </li>
-          <li>
-            <a href="/flight">Flight</a>
-          </li>
         </ul>
       </nav>
     </header>

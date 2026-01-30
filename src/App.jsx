@@ -35,7 +35,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/flight" element={<Flight flightId={1} persons={2} />} />
+        <Route path="/flight" element={<Flight />} />
         <Route path="/about" element={<About />} />
         <Route path="/thanks" element={<ThanksPage />} />
       </Routes>

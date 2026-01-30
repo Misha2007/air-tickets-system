@@ -1,8 +1,10 @@
 import "./Flight.css";
 import { useState, useEffect } from "react";
 import SelectedSeats from "./SelectedSeats";
+import { useLocation } from "react-router-dom";
 
-const Flight = (props) => {
+const Flight = () => {
+  const { state } = useLocation();
   const columns = ["A", "B", "C", "D"];
   const [seats, setSeats] = useState([]);
   const [rows, setRows] = useState(0);
@@ -12,8 +14,8 @@ const Flight = (props) => {
   const [pasPerSeat, setPasPerseat] = useState([]);
 
   useEffect(() => {
-    if (props.flightId) {
-      fetch(`http://192.168.41.206:8081/seats/flight/${props.flightId}`, {
+    if (state.flightId) {
+      fetch(`http://192.168.41.206:8081/seats/flight/${state.flightId}`, {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -26,7 +28,7 @@ const Flight = (props) => {
           setRows(Math.ceil(data.length / columns.length));
           const preselected = {};
 
-          for (let index = 0; index < props.persons; index++) {
+          for (let index = 0; index < state.persons; index++) {
             const seat = data
               .filter((seat) => seat.vaba)
               .slice(index, index + 1)
@@ -47,7 +49,7 @@ const Flight = (props) => {
         })
         .catch((error) => console.error("Error fetching seats:", error));
     }
-  }, [props.flightId]);
+  }, [state.flightId]);
 
   const handleSeatSelect = (event) => {
     const selected = event.target.value;
@@ -63,7 +65,7 @@ const Flight = (props) => {
         setSelectedPassenger(existingEntry[0]);
         delete newSelected[existingEntry[0]];
       } else {
-        if (Object.keys(newSelected).length < props.persons) {
+        if (Object.keys(newSelected).length < state.persons) {
           if (selectedPassenger) {
             newSelected[selectedPassenger] = selected;
           }
@@ -181,7 +183,7 @@ const Flight = (props) => {
             <div className="passengers">
               <h2>Passengers</h2>
               <div>
-                {Array.from({ length: props.persons }).map((_, index) => (
+                {Array.from({ length: state.persons }).map((_, index) => (
                   <div key={index}>
                     <div className="passengers-container selected">
                       <div className="passenger-square">

@@ -5,7 +5,6 @@ import Flight from "./Flight";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
-
 const Home = () => {
   const [flights, setFlights] = useState([]);
   const [openFlight, setOpenFlight] = useState(false);
@@ -20,10 +19,10 @@ const Home = () => {
 
   const [suggestions, setsuggestions] = useState([]);
   const [suggestionsTo, setTosuggestions] = useState([]);
-  const [canFrom, setcanFrom] = useState(false)
-  const [saveDate, setsaveDate] = useState([])
+  const [canFrom, setcanFrom] = useState(false);
+  const [saveDate, setsaveDate] = useState([]);
 
-  // First 
+  // First
   const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef();
   const [inputValue, setInputValue] = useState("Tallinn");
@@ -35,8 +34,7 @@ const Home = () => {
   const inputRef2 = useRef();
   const [isFocus2, setIsFocus2] = useState(false);
 
-  const [availableDates, setAvailableDates] = useState([])
-
+  const [availableDates, setAvailableDates] = useState([]);
 
   const [formData, setFormData] = useState({
     arrival: "",
@@ -107,11 +105,10 @@ const Home = () => {
     }
   };
 
-
   const FromCall = async () => {
     const ToParams = new URLSearchParams({
       Saabumiskoht: inputValue,
-      Sihtkoht: inputValue2
+      Sihtkoht: inputValue2,
     }).toString();
 
     console.log("Tell me it is working");
@@ -127,7 +124,7 @@ const Home = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("From is from working", data);
-        setAvailableDates(data.map(dateStr => new Date(dateStr)));
+        setAvailableDates(data.map((dateStr) => new Date(dateStr)));
       }
 
       if (!response.ok) {
@@ -136,7 +133,7 @@ const Home = () => {
     } catch (error) {
       console.error(" Error  fetching flights:", error);
     }
-  }
+  };
 
   //   if (response.ok) {
   //     console.log("From is working, this is the response");
@@ -152,25 +149,22 @@ const Home = () => {
   useEffect(() => {
     // This runs when the input field has been changed
     if (suggestions.includes(inputValue)) {
-      setcanFrom(true)
+      setcanFrom(true);
       ToCall();
       console.log("The useEffect clause ran");
     }
   }, [inputValue, suggestions]);
 
-
-
   useEffect(() => {
     if (canFrom && suggestionsTo.includes(inputValue2)) {
       FromCall();
-      console.log("The from useeffect ran")
+      console.log("The from useeffect ran");
     }
-  }, [inputValue2, suggestionsTo])
+  }, [inputValue2, suggestionsTo]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
 
   ///////////////////////////////////////
   const searchFlights = async (e) => {
@@ -179,7 +173,7 @@ const Home = () => {
     const queryParams = new URLSearchParams({
       Saabumiskoht: inputValue || "",
       Sihtkoht: inputValue2 || "",
-      LahkumiseAeg: date.toISOString().split('T')[0] || "",
+      LahkumiseAeg: date.toISOString().split("T")[0] || "",
       Arv: formData.persons || 1,
     }).toString();
 
@@ -369,9 +363,6 @@ const Home = () => {
                   )}
                 </div>
 
-
-
-
                 <div className="form-group">
                   <label htmlFor="date">Date:</label>
 
@@ -400,10 +391,12 @@ const Home = () => {
 
           {flights.length > 0 ? (
             <div className="main-flight-search">
+              {console.log(formData.persons)}
               {flights.map((flight, index) => (
                 <FlightSearch
                   key={index}
                   flight={flight}
+                  persons={formData.persons}
                   openFlightHandler={() => openFlightHandler(flight)}
                 />
               ))}
