@@ -2,6 +2,7 @@ import "./Flight.css";
 import { useState } from "react";
 import PasSeatInfo from "./UI/PasSeatInfo";
 import { useNavigate } from "react-router-dom";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const SelectedSeats = ({ passengerWSeat }) => {
   const [passengers, setPassengers] = useState(
@@ -32,14 +33,11 @@ const SelectedSeats = ({ passengerWSeat }) => {
   const submitAllPassengers = async () => {
     try {
       console.log(passengers);
-      const response = await fetch(
-        `http://192.168.41.206:8081/passenger-booking/create`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(passengers),
-        },
-      );
+      const response = await fetch(`${apiUrl}passenger-booking/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(passengers),
+      });
       const data = await response.json();
       console.log("All passengers saved:", data);
       navigate("/thanks");

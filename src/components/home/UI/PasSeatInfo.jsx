@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const PasSeatInfo = ({ pWSeat, passengerData, setPassengerData }) => {
   const [baggage, setBaggage] = useState([]);
@@ -6,7 +7,7 @@ const PasSeatInfo = ({ pWSeat, passengerData, setPassengerData }) => {
   useEffect(() => {
     const fetchBaggage = async () => {
       try {
-        const res = await fetch("http://192.168.41.206:8081/baggage/all");
+        const res = await fetch(`${apiUrl}baggage/all`);
         const data = await res.json();
         setBaggage(data);
       } catch (err) {

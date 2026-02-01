@@ -2,6 +2,7 @@ import "./Flight.css";
 import { useState, useEffect } from "react";
 import SelectedSeats from "./SelectedSeats";
 import { useLocation } from "react-router-dom";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const Flight = () => {
   const { state } = useLocation();
@@ -15,7 +16,7 @@ const Flight = () => {
 
   useEffect(() => {
     if (state.flightId) {
-      fetch(`http://192.168.41.206:8081/seats/flight/${state.flightId}`, {
+      fetch(`${apiUrl}seats/flight/${state.flightId}`, {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",

@@ -4,6 +4,7 @@ import FlightSearch from "./FlightSearch";
 import Flight from "./Flight";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const Home = () => {
   const [flights, setFlights] = useState([]);
@@ -45,7 +46,7 @@ const Home = () => {
 
   /* not in use right now
   const DateCall = async () => {
-    const response = await fetch(`http://192.168.41.206:8081/flights/date`, {
+    const response = await fetch(`${apiUrl}flights/date`, {
       method: "GET",
     }).then((response) => response.json());
 
@@ -57,7 +58,7 @@ const Home = () => {
   */
   // Trying to find all of the flights that are starting from a certain place
   const SaabumiskohtCall = async () => {
-    const response = await fetch(`http://192.168.41.206:8081/flights/from`, {
+    const response = await fetch(`${apiUrl}flights/from`, {
       method: "GET",
     });
 
@@ -84,12 +85,9 @@ const Home = () => {
     console.log("Tell me it is working");
     try {
       console.log(inputValue);
-      const response = await fetch(
-        `http://192.168.41.206:8081/flights/to?${ToParams}`,
-        {
-          method: "GET",
-        },
-      );
+      const response = await fetch(`${apiUrl}flights/to?${ToParams}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         console.log("From is working, this is the response");
@@ -114,12 +112,9 @@ const Home = () => {
     console.log("Tell me it is working");
     try {
       console.log(inputValue);
-      const response = await fetch(
-        `http://192.168.41.206:8081/flights/destination?${ToParams}`,
-        {
-          method: "GET",
-        },
-      );
+      const response = await fetch(`${apiUrl}flights/destination?${ToParams}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -179,9 +174,7 @@ const Home = () => {
 
     try {
       console.log(queryParams);
-      const response = await fetch(
-        `http://192.168.41.206:8081/flights/filtered?${queryParams}`,
-      );
+      const response = await fetch(`${apiUrl}flights/filtered?${queryParams}`);
       if (!response.ok) {
         console.log(response);
       }
@@ -205,7 +198,7 @@ const Home = () => {
   // useEffect(() => {
   //   async function loadLocations() {
   //     try {
-  //       const response = await fetch("http://192.168.41.206:8081/cities/all");
+  //       const response = await fetch("${apiUrl}cities/all");
   //       const data = await response.json();
 
   //       setLocations2(data.map((item) => item.linnNimi));
