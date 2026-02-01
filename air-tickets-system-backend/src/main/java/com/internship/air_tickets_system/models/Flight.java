@@ -1,11 +1,19 @@
 package com.internship.air_tickets_system.models;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
-// import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "flight")
@@ -43,7 +51,17 @@ public class Flight {
     @JsonManagedReference
     private List<Seat> istmed;
 
-    // Getters and setters omitted for brevity
+    @ManyToOne 
+    @JoinColumn(name = "saabumislennuJId", nullable = false)
+    private Airport saabumislennuJId;
+
+    @ManyToOne 
+    @JoinColumn(name = "sihtlennuJId", nullable = false)
+    private Airport sihtlennuJId;
+    
+    @ManyToOne 
+    @JoinColumn(name = "airplane_id", nullable = false)
+    private Airplane airplane;
 
     public Long getId() {
         return id;
@@ -124,6 +142,4 @@ public class Flight {
     public void setIstmed(List<Seat> istmed) {
         this.istmed = istmed;
     }
-
-    
 }

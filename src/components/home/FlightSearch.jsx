@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import "./FlightSearch.css";
 
 const FlightSearch = (props) => {
+  const navigate = useNavigate();
   const formatDateTime = (date) => {
     return new Intl.DateTimeFormat("en-GB", {
       year: "numeric",
@@ -34,7 +36,7 @@ const FlightSearch = (props) => {
         <small>
           {calculateDuration(
             props.flight.lahkumiseaeg,
-            props.flight.saabumiseaeg
+            props.flight.saabumiseaeg,
           )}
         </small>
       </div>
@@ -50,7 +52,14 @@ const FlightSearch = (props) => {
         {console.log(props.flight)}
         <button
           className="bold"
-          onClick={() => props.openFlightHandler(props.flight)}
+          onClick={() =>
+            navigate("/flight", {
+              state: {
+                flightId: props.flight.id,
+                persons: props.persons,
+              },
+            })
+          }
         >
           Select
         </button>

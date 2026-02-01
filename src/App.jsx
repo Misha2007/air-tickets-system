@@ -4,6 +4,9 @@ import Preloader from "./components/preloader/Preloader";
 import Home from "./components/home/Home";
 import Header from "./components/header/Header";
 import Flight from "./components/home/Flight";
+import { Route, Routes } from "react-router-dom";
+import About from "./components/home/About";
+import ThanksPage from "./components/home/UI/ThanksPage";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -20,21 +23,23 @@ function App() {
     sihtkoht: "Paris",
     saabumiskohtcode: "TLL",
     sihtkohtcode: "CDG",
-    lahkumiseaeg: "2025-04-09T09:00:00",
-    saabumiseaeg: "2025-04-09T10:30:00",
+    lahkumiseaeg: "2026-02-10 09:00:00",
+    saabumiseaeg: "2026-02-10 10:30:00",
     hind: 32.29,
     istmed: new Array(30).fill(null),
   };
 
   return (
     <div className="main">
+      <Header />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/flight" element={<Flight />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/thanks" element={<ThanksPage />} />
+      </Routes>
       {loading && <Preloader></Preloader>}
-      {!loading && (
-        <div className="main-header">
-          <Header />
-          <Home></Home>
-        </div>
-      )}
     </div>
   );
 }

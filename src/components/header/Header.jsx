@@ -1,20 +1,26 @@
 import React from "react";
-import "./Header.css"; // Import styles if needed
+import "./Header.css";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <header className="header">
-      <h1>My Website</h1>
       <nav>
         <ul>
           <li>
-            <a href="/">Home</a>
+            <a
+              href="/"
+              onClick={() => {
+                navigate("/");
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              Home
+            </a>
           </li>
           <li>
-            <a href="/">About</a>
-          </li>
-          <li>
-            <a href="/">Account</a>
+            <a href="/about">About</a>
           </li>
         </ul>
       </nav>

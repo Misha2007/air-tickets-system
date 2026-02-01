@@ -11,6 +11,12 @@
   padding: 0px;
 }
 
+@media (max-width: 398px) {
+  .main-flight-search .flight {
+    display: contents;
+  }
+}
+
 .main-flight-search .flight::after {
   content: "";
   position: absolute;
@@ -40,9 +46,13 @@ h1 {
   line-height: 10%;
 }
 
-p {
+#no-found {
   font-size: 36px;
   line-height: 60%;
+}
+
+p {
+  font-size: 24px;
 }
 
 small {
@@ -57,6 +67,14 @@ button {
   border: none;
   font-size: 36px;
   font-family: "Josefin Slab";
+}
+
+button:hover {
+  background-color: #993c2f;
+}
+
+button:focus {
+  background-color: #3b140e;
 }
 
 .last-item {

@@ -2,13 +2,7 @@
 
 #main-page {
   width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#main-page .form-container {
+  height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,6 +10,12 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+#main-page .form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 70vw;
   height: 70vh;
 }
@@ -26,23 +26,48 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
-  height: 30vh;
-  background: rgba(0, 0, 0, 0.25);
+  width: 45vw;
+  height: 55vh;
+
   z-index: -1;
 }
 
-#main-page .form-container form {
+/* Kui ekraan on liiga väike siis menüü on pikklik. >1650px inpunt muutub reaks */
+@media (min-width: 1650px) {
+  #main-page .form-container form {
+    /*see muudab reast torniks*/
+    display: flex;
+    position: relative;
+  }
+  #main-page .form-container form::after {
+    width: 75vw;
+    height: 25vh;
+  }
+}
+
+#main-page .form-container form,
+#main-page .form-container .thx {
   position: relative;
-  display: flex;
+
   align-items: center;
   justify-content: space-around;
-  margin: 10%;
-  background: rgba(129, 129, 129, 0.68);
+  margin: 20%;
+  background: rgba(51, 51, 51, 0.75);
   z-index: 1;
   color: #fff;
   border-radius: 20px;
   padding: 30px;
+}
+
+#main-page .form-container .thx {
+  text-align: center;
+  font-size: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  cursor: pointer;
 }
 
 .form-group {
@@ -101,4 +126,29 @@ input[type="number"]::-webkit-inner-spin-button {
 #no-found {
   color: #ff3021;
   text-align: center;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown li {
+  padding: 8px;
+  cursor: pointer;
+  color: black;
+}
+
+.dropdown li:hover {
+  background-color: #f0f0f0;
 }
