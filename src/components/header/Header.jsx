@@ -6,18 +6,18 @@ const Header = () => {
   const navigate = useNavigate();
   return (
     <header className="header">
-      <h1
-        onClick={() => {
-          navigate("/");
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        Flight ticket search
-      </h1>
       <nav>
         <ul>
           <li>
-            <a href="/">Home</a>
+            <a
+              href="/"
+              onClick={() => {
+                navigate("/");
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              Home
+            </a>
           </li>
           <li>
             <a href="/about">About</a>

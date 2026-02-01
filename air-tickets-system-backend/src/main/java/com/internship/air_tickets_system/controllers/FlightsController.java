@@ -16,8 +16,17 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @CrossOrigin()
-@Controller
+@RestController
+@RequestMapping("/flights")
+@Tag(name = "Flights", description = "Flight search and management")
 public class FlightsController {
 
     private final FlightRepository flightsRepository;
@@ -27,16 +36,26 @@ public class FlightsController {
         this.flightsRepository = flightsRepository;
     }
 
-    @GetMapping("/flights")
+    @Operation(summary = "Get all flights")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "List of all flights")
+    })
+    @GetMapping
     public @ResponseBody List<Flight> getFlights() {
         return StreamSupport.stream(flightsRepository.findAll().spliterator(), false)
                             .collect(Collectors.toList());
     }
 
-
-    @GetMapping("/flights/filtered")
-@ResponseBody
-public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht, 
+    @Operation(
+        summary = "Search flights with filters",
+        description = "Filter flights by departure, destination, date, seat count and optional max price"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Filtered flights returned")
+    })
+    @GetMapping("/filtered")
+    @ResponseBody
+    public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht, 
                                         @RequestParam String Sihtkoht, 
                                         @RequestParam String LahkumiseAeg, 
                                         @RequestParam int Arv, 
@@ -56,7 +75,12 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         .collect(Collectors.toList());
 }
 
-    @GetMapping("/flights/{id}")
+    @Operation(summary = "Get flight by ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Flight found"),
+        @ApiResponse(responseCode = "404", description = "Flight not found")
+    })
+    @GetMapping("/{id}")
     public ResponseEntity<Flight> getFlightByNumber(@PathVariable Long id) {
         
         return ResponseEntity.ok().body(flightsRepository.findById(id).orElse(null));
@@ -73,8 +97,8 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
     //     // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
     // }
 
-
-    @GetMapping("/flights/from") 
+    @Operation(summary = "Get all departure locations")
+    @GetMapping("/from") 
     public ResponseEntity<List<String>> getDistinctSaabumiskohad() {
         // return ResponseEntity.ok().body(flightsRepository.findAllByAttribute(LocalDateTime datetime).orElse(null));
         System.out.println("Looking for the going flights");
@@ -82,15 +106,16 @@ public List<Flight> getFilteredFlights(@RequestParam String Saabumiskoht,
         return ResponseEntity.ok(flights);
     }
 
-    @GetMapping("/flights/to") 
+    @Operation(summary = "Get destinations from a departure location")
+    @GetMapping("/to") 
     public ResponseEntity<List<String>> GetAllSihtkohad(@RequestParam String Saabumiskoht) {
         System.out.println("Looking for where the spcific input flight is going");
         List<String> flights = flightsRepository.findBySihtkoht(Saabumiskoht);
         return ResponseEntity.ok(flights);
     }
 
-
-    @GetMapping("/flights/destination") 
+    @Operation(summary = "Get available flight dates for route")
+    @GetMapping("/destination") 
     public ResponseEntity<List<String>> GetAllDates(@RequestParam String Saabumiskoht, @RequestParam String Sihtkoht) {
         System.out.println("Find all of the dates that to/from combo has");
         List<String> flights = flightsRepository.findBySihtkohtAndSaabumiskoht(Saabumiskoht, Sihtkoht);

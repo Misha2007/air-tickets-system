@@ -11,6 +11,12 @@
   padding: 0px;
 }
 
+@media (max-width: 398px) {
+  .main-flight-search .flight {
+    display: contents;
+  }
+}
+
 .main-flight-search .flight::after {
   content: "";
   position: absolute;

@@ -22,6 +22,18 @@ import com.internship.air_tickets_system.repositories.PassengerBookingRepository
 import com.internship.air_tickets_system.repositories.PassengerRepository;
 import com.internship.air_tickets_system.repositories.SeatRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(
+    name = "Passenger Booking",
+    description = "Create passengers and assign seats, baggage, and bookings"
+)
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/passenger-booking")
@@ -37,26 +49,37 @@ public class PassengerBookingController {
     @Autowired
     private BaggageRepository baggageRepository;
 
+    @Schema(description = "Passenger creation request")
     public static class PassengerRequest {
 
+        @Schema(example = "John")
         private String reisijaENimi;
-        
+
+        @Schema(example = "Doe")
         private String reisijaPNimi;
 
+        @Schema(example = "1995-06-15", type = "string", format = "date")
         private LocalDate synniP;
 
+        @Schema(example = "+3725555555")
         private String telefon;
 
+        @Schema(example = "john.doe@email.com")
         private String email;
 
+        @Schema(example = "M")
         private String sugu;
 
+        @Schema(example = "EE")
         private String countryId;
 
+        @Schema(example = "1234567890")
         private String nationalId;
 
+        @Schema(description = "Seat ID to assign", example = "12")
         private Long seatId;
 
+        @Schema(description = "Baggage option ID", example = "2")
         private Long baggageId;
 
         public String getReisijaENimi() {
@@ -140,7 +163,28 @@ public class PassengerBookingController {
         }
     };
 
-
+    @Operation(
+        summary = "Create passenger booking",
+        description = """
+            Creates a new booking and assigns:
+            - passengers
+            - seats
+            - baggage
+            
+            One booking is created for all passengers in the request.
+            """
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Passenger booking created successfully",
+            content = @Content(array = @ArraySchema(
+                schema = @Schema(implementation = PassengerBooking.class)
+            ))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request"),
+        @ApiResponse(responseCode = "404", description = "Seat or baggage not found")
+    })
     @PostMapping("/create")
     public ResponseEntity<List<PassengerBooking>> createSeats(@RequestBody List<PassengerRequest> passengerRequests) {
         Booking booking = new Booking();
